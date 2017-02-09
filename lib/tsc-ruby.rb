@@ -31,7 +31,7 @@ module TypeScript
         script = script.read if script.respond_to?(:read)
         js_file = Tempfile.new(%w(tsc-ruby .ts))
         begin
-          js_file.write(source)
+          js_file.write(script)
           js_file.close
           result = compile_file(js_file.path, *tsc_options)
           if result.success?
@@ -44,13 +44,11 @@ module TypeScript
         end
       end
 
-      private
-
-      # Compile TypeScript source file to JavaScript source file.
+      # Compile TypeScript script file to JavaScript script file.
       #
       # Compilation is a one to one process, not implicit concatenation of referenced dependencies is performed.
       #
-      # @param [String] source_file TypeScript source file
+      # @param [String] TypeScript script file
       # @return [TypeScript::Ruby::CompileResult] compile result
       def compile_file(source_file, *tsc_options)
         Dir.mktmpdir do |output_dir|
